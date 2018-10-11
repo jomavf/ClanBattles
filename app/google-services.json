@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "362493745361",
+    "firebase_url": "https://clan-battles-bb516.firebaseio.com",
+    "project_id": "clan-battles-bb516",
+    "storage_bucket": "clan-battles-bb516.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:362493745361:android:ccd040fdaf006c26",
+        "android_client_info": {
+          "package_name": "com.zetagh.clanbattles"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "362493745361-ou2po64t6br73p6in9fats7ppuh3crfp.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.zetagh.clanbattles",
+            "certificate_hash": "8111ba3ff8efea940dfe8ef6fd56c8d53423a5fd"
+          }
+        },
+        {
+          "client_id": "362493745361-c96ki9itafb5cmklcse5mhnfgg5n5vsg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAIpvNXexapWSVt_trQfuj9OYpeEc7UNIs"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "362493745361-c96ki9itafb5cmklcse5mhnfgg5n5vsg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
