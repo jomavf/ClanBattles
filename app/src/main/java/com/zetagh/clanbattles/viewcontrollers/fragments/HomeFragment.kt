@@ -64,7 +64,6 @@ class HomeFragment : Fragment() {
                         publications.reverse()
                         publicationAdapter.publications = publications
                         publicationAdapter.notifyDataSetChanged()
-                        Log.d("ClanBattles","Objeto 'publication'$publications")
                     }
 
                     override fun onError(anError: ANError?) {

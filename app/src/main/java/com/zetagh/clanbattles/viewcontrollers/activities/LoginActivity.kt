@@ -8,6 +8,7 @@ import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.auth.api.signin.GoogleSignInResult
 import com.google.android.gms.common.ConnectionResult
+import com.google.android.gms.common.SignInButton
 import com.google.android.gms.common.api.GoogleApiClient
 import com.zetagh.clanbattles.R
 import kotlinx.android.synthetic.main.content_login.*
@@ -36,11 +37,18 @@ class LoginActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedLis
             context.startActivity(Intent(context,OnBoardingActivity::class.java))
         }
 
+        signInButtonCustomize()
+
         signInButton.setOnClickListener {
             var intent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient)
             startActivityForResult(intent,SIGN_IN_CODE)
         }
 
+    }
+
+    private fun signInButtonCustomize() {
+        signInButton.setSize(SignInButton.SIZE_WIDE)
+        signInButton.setColorScheme(SignInButton.COLOR_DARK )
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -56,7 +64,7 @@ class LoginActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedLis
         if(result!!.isSuccess){
             goMainScreen()
         }else{
-            Toast.makeText(this,getString(R.string.not_log_in), Toast.LENGTH_SHORT).show()
+            Toast.makeText(applicationContext,getString(R.string.not_log_in), Toast.LENGTH_SHORT).show()
         }
     }
 

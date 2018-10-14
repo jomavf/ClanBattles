@@ -20,6 +20,11 @@
     <string name="not_log_in">Error when trying to Sign in</string>
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="on_boarding_next_button">Continue</string>
+    <string name="contentDescriptionUpButton">Up Button</string>
+    <string name="userImageView">userImageView</string>
+    <string name="account">Account</string>
+    <string name="username">mockUsername</string>
 
 </resources>
 

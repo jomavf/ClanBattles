@@ -15,6 +15,7 @@ import com.androidnetworking.AndroidNetworking
 import com.androidnetworking.common.Priority
 import com.androidnetworking.error.ANError
 import com.androidnetworking.interfaces.JSONObjectRequestListener
+import com.google.android.gms.common.internal.ResourceUtils
 import com.google.android.gms.tasks.Continuation
 import com.google.android.gms.tasks.Task
 import com.google.firebase.storage.FirebaseStorage
@@ -70,7 +71,7 @@ class AddPublicationActivity : AppCompatActivity() {
 
         if(requestCode == PICK_IMAGE_REQUEST &&  resultCode == RESULT_OK && data!= null && data.data !=null){
             Log.d("photo","Entro a ")
-            filePath = data!!.data
+            filePath = data.data
             try {
                 bitmap = MediaStore.Images.Media.getBitmap(contentResolver,filePath)
                 var stream = ByteArrayOutputStream()

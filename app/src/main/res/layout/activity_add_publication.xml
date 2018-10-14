@@ -23,7 +23,7 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_add_publication" />
+    <include layout="@layout/content_add_publication"/>
 
 </android.support.design.widget.CoordinatorLayout>
 

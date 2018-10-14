@@ -28,17 +28,18 @@ class OnBoardingActivity : AppCompatActivity() {
         setContentView(R.layout.activity_on_boarding)
 
         setSupportActionBar(toolbar)
-        toolbar.title = "Selecciona tu comunidad"
+        //TODO("Improve above name - set a resource")
+        toolbar.title = "What are you preference?"
 
         gamesAdapter = GameAdapter(games, this)
-        gamesLayoutManager = LinearLayoutManager(this) as RecyclerView.LayoutManager
+        gamesLayoutManager = LinearLayoutManager(this)
         gamesRecyclerView = this.gamesRecyclerViewLayout
         gamesRecyclerView.adapter = gamesAdapter
         gamesRecyclerView.layoutManager  = gamesLayoutManager
 
 
         AndroidNetworking.get(ClanBattlesApi.getGameUrl)
-                .setPriority(Priority.LOW)
+                .setPriority(Priority.MEDIUM)
                 .setTag(ClanBattlesApi.tag)
                 .build()
                 .getAsObject(GameResponse::class.java, object : ParsedRequestListener<GameResponse> {
@@ -56,4 +57,3 @@ class OnBoardingActivity : AppCompatActivity() {
                 })
     }
 }
-

@@ -23,26 +23,50 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
 
         val intent = intent?:return
-        bundle = intent.extras!!
+        if(intent.extras != null){
+            bundle = intent.extras!!
+        }else{
+            //TODO("Improve this strategy")
+            bundle = Bundle()
+            bundle.putInt("id", 1)
+        }
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         setSupportActionBar(toolbar)
-        toolbar.title = "Home in case"
 
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
         navigation.selectedItemId = R.id.navigation_home
 
-        //Funcion definida en la parte inferior
+        //Function below
         setOnListenerFloatingActionButton()
     }
 
-
+    //This load the Menu in the toolbar
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.navigation_toolbar,menu)
-        return true
+        return super.onCreateOptionsMenu(menu)
     }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when(item!!.itemId){
+            R.id.action_account->{
+                goToAccountActivity()
+                return true
+            }
+            R.id.action_search->{
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    private fun goToAccountActivity() {
+        val intent = Intent(this,AccountActivity::class.java)
+        startActivity(intent)
+    }
+
 
     private fun fragmentFor(item: MenuItem): Fragment? {
         when(item.itemId){
@@ -52,17 +76,17 @@ class MainActivity : AppCompatActivity() {
                 return HomeFragment()
             }
             R.id.navigation_sources -> {
-                toolbar.title = "Map"
+                toolbar.title = "Lan Centers Map"
                 mainFloatingActionButton.visibility = View.GONE
                 return MapFragment()
             }
             R.id.navigation_ranking -> {
-                toolbar.title = "Groups"
+                toolbar.title = "General Ranking"
                 mainFloatingActionButton.visibility = View.GONE
                 return RankFragment()
             }
             R.id.navigation_favorites -> {
-                toolbar.title = "Message"
+                toolbar.title = "Messages"
                 mainFloatingActionButton.visibility = View.GONE
                 return ChatFragment()
             }
@@ -72,7 +96,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun navigateTo(item: MenuItem):Boolean {
         item.isChecked = true
-        var fragment: Fragment = fragmentFor(item)!!
+        val fragment: Fragment = fragmentFor(item)!!
         fragment.arguments = bundle
         return supportFragmentManager
                 .beginTransaction()
