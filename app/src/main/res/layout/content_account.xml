@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -39,7 +38,7 @@
         app:layout_constraintTop_toBottomOf="@+id/mockAccountTextView" />
 
     <ImageView
-        android:id="@+id/UserImageView"
+        android:id="@+id/userImageView"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_marginStart="8dp"
@@ -57,7 +56,7 @@
         android:layout_marginTop="8dp"
         android:text="@string/username"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/UserImageView" />
+        app:layout_constraintTop_toBottomOf="@+id/userImageView" />
 
     <View
         android:id="@+id/divider"

@@ -20,6 +20,8 @@ class MainActivity : AppCompatActivity() {
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item -> return@OnNavigationItemSelectedListener navigateTo(item) }
     private lateinit var bundle:Bundle
 
+    //TODO(Tengo que primero hacer un login silencioso , guardar los datos necesarios en el shared preference o base de datos y luego jalar esa data a los campos correspodientes [acccount activity] , borrar login silencioso de account activity ,by Veliz)
+
     override fun onCreate(savedInstanceState: Bundle?) {
 
         val intent = intent?:return

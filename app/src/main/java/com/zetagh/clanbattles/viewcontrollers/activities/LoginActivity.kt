@@ -22,7 +22,7 @@ class LoginActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedLis
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        var gso: GoogleSignInOptions = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+        val gso: GoogleSignInOptions = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .build()
 
@@ -40,7 +40,7 @@ class LoginActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedLis
         signInButtonCustomize()
 
         signInButton.setOnClickListener {
-            var intent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient)
+            val intent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient)
             startActivityForResult(intent,SIGN_IN_CODE)
         }
 
@@ -55,7 +55,7 @@ class LoginActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedLis
         super.onActivityResult(requestCode, resultCode, data)
 
         if(requestCode == SIGN_IN_CODE){
-            var result = Auth.GoogleSignInApi.getSignInResultFromIntent(data)
+            val result = Auth.GoogleSignInApi.getSignInResultFromIntent(data)
             handleSignInResult(result)
         }
     }
@@ -69,7 +69,7 @@ class LoginActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedLis
     }
 
     private fun goMainScreen() {
-        var intent = Intent(this,OnBoardingActivity::class.java)
+        val intent = Intent(this,OnBoardingActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
