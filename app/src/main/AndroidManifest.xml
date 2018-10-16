@@ -32,13 +32,11 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
         <activity
             android:name=".viewcontrollers.activities.MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar" >
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
             android:name=".viewcontrollers.activities.AddPublicationActivity"
             android:parentActivityName=".viewcontrollers.activities.MainActivity"
@@ -68,8 +66,13 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".viewcontrollers.activities.MainActivity" />
         </activity>
-        <activity android:name=".viewcontrollers.activities.LogOutActivity"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".viewcontrollers.activities.LogOutActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity android:name=".viewcontrollers.activities.SettingsActivity"
+            android:parentActivityName=".viewcontrollers.activities.LogOutActivity"
+            android:label="My Settings"/>
     </application>
 
 </manifest>

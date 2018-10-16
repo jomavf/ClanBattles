@@ -34,11 +34,11 @@ class LoginActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedLis
 
         loginButton.setOnClickListener {
             val context = it.context
-            context.startActivity(Intent(context,OnBoardingActivity::class.java))
+            context.startActivity(Intent(context,MainActivity::class.java))
         }
 
-        signInButtonCustomize()
 
+        signInButtonCustomize()
         signInButton.setOnClickListener {
             val intent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient)
             startActivityForResult(intent,SIGN_IN_CODE)
@@ -69,7 +69,7 @@ class LoginActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedLis
     }
 
     private fun goMainScreen() {
-        val intent = Intent(this,OnBoardingActivity::class.java)
+        val intent = Intent(this,MainActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)

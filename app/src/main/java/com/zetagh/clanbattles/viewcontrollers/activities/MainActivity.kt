@@ -11,7 +11,6 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import com.bumptech.glide.Glide
 import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.auth.api.signin.GoogleSignInResult
@@ -19,12 +18,12 @@ import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.common.api.OptionalPendingResult
 import com.zetagh.clanbattles.R
+import com.zetagh.clanbattles.models.SettingsRepository
 import com.zetagh.clanbattles.viewcontrollers.fragments.ChatFragment
 import com.zetagh.clanbattles.viewcontrollers.fragments.HomeFragment
 import com.zetagh.clanbattles.viewcontrollers.fragments.MapFragment
 import com.zetagh.clanbattles.viewcontrollers.fragments.RankFragment
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.content_account.*
 
 class MainActivity : AppCompatActivity(),GoogleApiClient.OnConnectionFailedListener  {
 
@@ -53,9 +52,14 @@ class MainActivity : AppCompatActivity(),GoogleApiClient.OnConnectionFailedListe
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-
         setSupportActionBar(toolbar)
+
+        val settings = SettingsRepository(this)
+        if (settings.shouldShowOnboarding) {
+            startActivity(
+                    Intent(this,
+                            OnBoardingActivity::class.java))
+        }
 
         //Google SignIn
         getObjectResult()
@@ -105,7 +109,7 @@ class MainActivity : AppCompatActivity(),GoogleApiClient.OnConnectionFailedListe
 
     }
     private fun saveUserToSharePreference(username:String?,urlToUserImage:String) {
-        sharePref = getSharedPreferences("com.zetagh.clanbattles.userData",Context.MODE_PRIVATE)
+        sharePref = getPreferences(Context.MODE_PRIVATE)
         with(sharePref.edit()){
             putString("username",username)
             putString("urlToUserImage",urlToUserImage)

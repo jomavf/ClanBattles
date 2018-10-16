@@ -10,6 +10,7 @@ import android.widget.Toast
 import com.zetagh.clanbattles.R
 import com.zetagh.clanbattles.models.AccountSettings
 import com.zetagh.clanbattles.viewcontrollers.activities.LogOutActivity
+import com.zetagh.clanbattles.viewcontrollers.activities.SettingsActivity
 import kotlinx.android.synthetic.main.item_account.view.*
 
 class AccountAdapter(private var listOfConfig:ArrayList<AccountSettings>,private val mContext: Context):RecyclerView.Adapter<AccountAdapter.ViewHolder>(){
@@ -41,11 +42,13 @@ class AccountAdapter(private var listOfConfig:ArrayList<AccountSettings>,private
                 when(mAccountSettings.id){
                     1->{
                         //do something
-                        Toast.makeText(mContext,"You clicked my account" ,Toast.LENGTH_SHORT).show()
+                        Toast.makeText(mContext,"You clicked Settings" ,Toast.LENGTH_SHORT).show()
+                        val context = it.context
+                        context.startActivity(Intent(context,SettingsActivity::class.java))
                     }
                     2->{
                         //TODO(Do something to sign out -> silence login should be in other part)
-                        Toast.makeText(mContext,"You clicked sign out",Toast.LENGTH_SHORT).show()
+//                        Toast.makeText(mContext,"You clicked sign out",Toast.LENGTH_SHORT).show()
                         val context = it.context
                         context.startActivity(Intent(context,LogOutActivity::class.java))
                     }

@@ -11,6 +11,7 @@ import com.androidnetworking.error.ANError
 import com.androidnetworking.interfaces.ParsedRequestListener
 import com.zetagh.clanbattles.R
 import com.zetagh.clanbattles.models.Game
+import com.zetagh.clanbattles.models.SettingsRepository
 import com.zetagh.clanbattles.networking.ClanBattlesApi
 import com.zetagh.clanbattles.networking.GameResponse
 import com.zetagh.clanbattles.viewcontrollers.adapters.GameAdapter
@@ -28,14 +29,22 @@ class OnBoardingActivity : AppCompatActivity() {
         setContentView(R.layout.activity_on_boarding)
 
         setSupportActionBar(toolbar)
-        //TODO("Improve above name - set a resource")
-        toolbar.title = "What are you preference?"
+
+        //should show on boarding
+        continueBottom.setOnClickListener { view ->
+            val settings = SettingsRepository(view.context)
+            settings.didShowOnboarding = true
+            finish()
+        }
+
+        toolbar.title = "What are your preferences?"
 
         gamesAdapter = GameAdapter(games, this)
         gamesLayoutManager = LinearLayoutManager(this)
         gamesRecyclerView = this.gamesRecyclerViewLayout
         gamesRecyclerView.adapter = gamesAdapter
         gamesRecyclerView.layoutManager  = gamesLayoutManager
+
 
 
         AndroidNetworking.get(ClanBattlesApi.getGameUrl)

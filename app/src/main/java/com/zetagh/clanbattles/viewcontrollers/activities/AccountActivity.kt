@@ -98,7 +98,7 @@ class AccountActivity : AppCompatActivity(),GoogleApiClient.OnConnectionFailedLi
     }
 
     private fun initializeRecyclerView() {
-        val myAccount = AccountSettings(1,R.drawable.ic_settings_black_24dp,"My account")
+        val myAccount = AccountSettings(1,R.drawable.ic_settings_black_24dp,"Settings")
         val signOut = AccountSettings(2,R.drawable.ic_open_in_new_black_24dp,"Sign Out")
         listConfiguration = ArrayList()
         listConfiguration.add(myAccount)
