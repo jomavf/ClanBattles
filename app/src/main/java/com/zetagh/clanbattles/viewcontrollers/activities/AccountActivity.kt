@@ -1,6 +1,9 @@
 package com.zetagh.clanbattles.viewcontrollers.activities
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
+import android.net.Uri
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
@@ -24,53 +27,71 @@ class AccountActivity : AppCompatActivity(),GoogleApiClient.OnConnectionFailedLi
     private lateinit var accountAdapter:AccountAdapter
     private lateinit var accountLayoutManager:RecyclerView.LayoutManager
     private lateinit var mAccountRecyclerView:RecyclerView
-    private lateinit var gso:GoogleSignInOptions
-    private lateinit var googleApiClient: GoogleApiClient
+//    private  var gso:GoogleSignInOptions?=null
+//    private  var googleApiClient: GoogleApiClient?=null
+
+    //Shared preference
+    private lateinit var sharePref:SharedPreferences
+    private var username:String?=null
+    private var urlToUserPhoto:String?=null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_account)
 
-        backButtonListener()
+//        backButtonListener()
         initializeRecyclerView()
-        getObjectResult()
+        readSharePreference()
+        updateUserData()
+//        getObjectResult()
     }
 
-    private fun getObjectResult() {
-        gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build()
-        googleApiClient = GoogleApiClient.Builder(this).enableAutoManage(this,this).addApi(Auth.GOOGLE_SIGN_IN_API,gso).build()
+    private fun updateUserData() {
+        userFullNameTextView.text = username
+        Glide.with(this).load(Uri.parse(urlToUserPhoto)).into(userImageView)
     }
 
-    override fun onStart() {
-        super.onStart()
-        val opr :OptionalPendingResult<GoogleSignInResult> = Auth.GoogleSignInApi.silentSignIn(googleApiClient)
-        if(opr.isDone){
-            val result = opr.get()
-            handlerSignInResult(result)
-        }else{
-            opr.setResultCallback {
-                handlerSignInResult(it)
-            }
-        }
+    private fun readSharePreference() {
+        sharePref = getSharedPreferences("com.zetagh.clanbattles.userData",Context.MODE_PRIVATE)
+        username = sharePref.getString("username","No username found")
+        urlToUserPhoto = sharePref.getString("urlToUserImage","No image found")
     }
 
-    private fun handlerSignInResult(result: GoogleSignInResult?) {
-        if(result!!.isSuccess){
-            val account = result.signInAccount
-            Glide.with(this).load(account!!.photoUrl).into(userImageView)
-            userFullNameTextView.text = account.displayName
+//    private fun getObjectResult() {
+//        gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build()
+//        googleApiClient = GoogleApiClient.Builder(this).enableAutoManage(this,this).addApi(Auth.GOOGLE_SIGN_IN_API,gso).build()
+//    }
 
-        }else{
+//    override fun onStart() {
+//        super.onStart()
+//        val opr :OptionalPendingResult<GoogleSignInResult> = Auth.GoogleSignInApi.silentSignIn(googleApiClient)
+//        if(opr.isDone){
+//            val result = opr.get()
+//            handlerSignInResult(result)
+//        }else{
+//            opr.setResultCallback {
+//                handlerSignInResult(it)
+//            }
+//        }
+//    }
 
-            goLogInScreen()
-        }
-    }
+//    private fun handlerSignInResult(result: GoogleSignInResult?) {
+//        if(result!!.isSuccess){
+//            val account = result.signInAccount
+//            Glide.with(this).load(account!!.photoUrl).into(userImageView)
+//            userFullNameTextView.text = account.displayName
+//
+//        }else{
+//
+//            goLogInScreen()
+//        }
+//    }
 
-    private fun goLogInScreen() {
-        val intent = Intent(this,LoginActivity::class.java)
-        startActivity(intent)
-    }
+//    private fun goLogInScreen() {
+//        val intent = Intent(this,LoginActivity::class.java)
+//        startActivity(intent)
+//    }
 
     private fun backButtonListener() {
 //        TODO("Implement the back button to MainActivity")
@@ -93,22 +114,22 @@ class AccountActivity : AppCompatActivity(),GoogleApiClient.OnConnectionFailedLi
     override fun onConnectionFailed(p0: ConnectionResult) {
     }
 
-    private fun logOut(){
-        Auth.GoogleSignInApi.signOut(googleApiClient).setResultCallback {
-            if(it.isSuccess){
-                goLogInScreen()
-            }else{
-                Toast.makeText(applicationContext,"Impossible to close session",Toast.LENGTH_SHORT).show()
-            }
-        }
-    }
-    private fun revoke(){
-        Auth.GoogleSignInApi.revokeAccess(googleApiClient).setResultCallback {
-            if(it.isSuccess){
-                goLogInScreen()
-            }else{
-                Toast.makeText(applicationContext,"Impossible to close session",Toast.LENGTH_SHORT).show()
-            }
-        }
-    }
+//    private fun logOut(){
+//        Auth.GoogleSignInApi.signOut(googleApiClient).setResultCallback {
+//            if(it.isSuccess){
+//                goLogInScreen()
+//            }else{
+//                Toast.makeText(applicationContext,"Impossible to close session",Toast.LENGTH_SHORT).show()
+//            }
+//        }
+//    }
+//    private fun revoke(){
+//        Auth.GoogleSignInApi.revokeAccess(googleApiClient).setResultCallback {
+//            if(it.isSuccess){
+//                goLogInScreen()
+//            }else{
+//                Toast.makeText(applicationContext,"Impossible to close session",Toast.LENGTH_SHORT).show()
+//            }
+//        }
+//    }
 }
