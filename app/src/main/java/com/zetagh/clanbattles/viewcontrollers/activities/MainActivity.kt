@@ -109,7 +109,7 @@ class MainActivity : AppCompatActivity(),GoogleApiClient.OnConnectionFailedListe
 
     }
     private fun saveUserToSharePreference(username:String?,urlToUserImage:String) {
-        sharePref = getPreferences(Context.MODE_PRIVATE)
+        sharePref = getSharedPreferences("com.zetagh.clanbattles.userData",Context.MODE_PRIVATE)
         with(sharePref.edit()){
             putString("username",username)
             putString("urlToUserImage",urlToUserImage)

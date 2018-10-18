@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.google.android.gms.auth.api.Auth
@@ -56,6 +57,8 @@ class AccountActivity : AppCompatActivity(),GoogleApiClient.OnConnectionFailedLi
         sharePref = getSharedPreferences("com.zetagh.clanbattles.userData",Context.MODE_PRIVATE)
         username = sharePref.getString("username","No username found")
         urlToUserPhoto = sharePref.getString("urlToUserImage","No image found")
+        Log.d("test1","User -> $username")
+        Log.d("test1","urlPhoto -> $urlToUserPhoto")
     }
 
 //    private fun getObjectResult() {
