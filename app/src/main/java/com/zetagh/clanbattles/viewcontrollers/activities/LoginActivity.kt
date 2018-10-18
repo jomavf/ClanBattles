@@ -3,47 +3,63 @@ package com.zetagh.clanbattles.viewcontrollers.activities
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import com.google.android.gms.auth.api.Auth
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.android.gms.auth.api.signin.GoogleSignInResult
+import com.google.android.gms.auth.api.signin.*
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.SignInButton
+import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.common.api.GoogleApiClient
+import com.google.android.gms.tasks.Task
 import com.zetagh.clanbattles.R
 import kotlinx.android.synthetic.main.content_login.*
 
 class LoginActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedListener {
 
-    private var googleApiClient: GoogleApiClient? = null
-    private val SIGN_IN_CODE = 666
+    private var googleSignInClient: GoogleSignInClient? = null
+    private lateinit var gso:GoogleSignInOptions
+    private val RC_SIGN_IN = 777
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        val gso: GoogleSignInOptions = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .build()
 
+        googleSignInClient = GoogleSignIn.getClient(this,gso)
 
-        googleApiClient = GoogleApiClient.Builder(this)
-                .enableAutoManage(this,this)
-                .addApi(Auth.GOOGLE_SIGN_IN_API,gso)
-                .build()
+        userAlreadyLogIn()
 
         loginButton.setOnClickListener {
             val context = it.context
             context.startActivity(Intent(context,MainActivity::class.java))
         }
 
-
+        //Sign in button listener
         signInButtonCustomize()
         signInButton.setOnClickListener {
-            val intent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient)
-            startActivityForResult(intent,SIGN_IN_CODE)
+            val signInIntent:Intent= googleSignInClient!!.signInIntent
+            startActivityForResult(signInIntent,RC_SIGN_IN)
         }
 
+    }
+
+    private fun userAlreadyLogIn() {
+        val account : GoogleSignInAccount? = GoogleSignIn.getLastSignedInAccount(this)
+        updateUI(account)
+    }
+
+    private fun updateUI(account: GoogleSignInAccount?) {
+        if(account != null){
+            //user already signed in the app
+            goMainScreen()
+        }else{
+            //the user has not yet signed in
+            Toast.makeText(applicationContext,"Log in please",Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun signInButtonCustomize() {
@@ -54,17 +70,21 @@ class LoginActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedLis
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if(requestCode == SIGN_IN_CODE){
-            val result = Auth.GoogleSignInApi.getSignInResultFromIntent(data)
-            handleSignInResult(result)
+        if(requestCode == RC_SIGN_IN){
+            val task : Task<GoogleSignInAccount> = GoogleSignIn.getSignedInAccountFromIntent(data)
+            handleSignInResult(task)
         }
     }
 
-    private fun handleSignInResult(result: GoogleSignInResult?) {
-        if(result!!.isSuccess){
+    private fun handleSignInResult(completeTask: Task<GoogleSignInAccount>?) {
+        try {
+            //TODO(Should I save here in the shared Preference?)
+            val account : GoogleSignInAccount = completeTask!!.getResult(ApiException::class.java)!!
+            Log.d("test","Log in act Username -> ${account.displayName}")
+            Log.d("test","Log in act PhotoUrl -> ${account.photoUrl}")
             goMainScreen()
-        }else{
-            Toast.makeText(applicationContext,getString(R.string.not_log_in), Toast.LENGTH_SHORT).show()
+        }catch (e:ApiException ){
+            Log.d("signIn","signInResult:failed code= ${e.statusCode}")
         }
     }
 

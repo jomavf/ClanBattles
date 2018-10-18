@@ -28,9 +28,6 @@ class AccountActivity : AppCompatActivity(),GoogleApiClient.OnConnectionFailedLi
     private lateinit var accountAdapter:AccountAdapter
     private lateinit var accountLayoutManager:RecyclerView.LayoutManager
     private lateinit var mAccountRecyclerView:RecyclerView
-//    private  var gso:GoogleSignInOptions?=null
-//    private  var googleApiClient: GoogleApiClient?=null
-
     //Shared preference
     private lateinit var sharePref:SharedPreferences
     private var username:String?=null
@@ -41,11 +38,9 @@ class AccountActivity : AppCompatActivity(),GoogleApiClient.OnConnectionFailedLi
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_account)
 
-//        backButtonListener()
         initializeRecyclerView()
         readSharePreference()
         updateUserData()
-//        getObjectResult()
     }
 
     private fun updateUserData() {
@@ -60,41 +55,6 @@ class AccountActivity : AppCompatActivity(),GoogleApiClient.OnConnectionFailedLi
         Log.d("test1","User -> $username")
         Log.d("test1","urlPhoto -> $urlToUserPhoto")
     }
-
-//    private fun getObjectResult() {
-//        gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build()
-//        googleApiClient = GoogleApiClient.Builder(this).enableAutoManage(this,this).addApi(Auth.GOOGLE_SIGN_IN_API,gso).build()
-//    }
-
-//    override fun onStart() {
-//        super.onStart()
-//        val opr :OptionalPendingResult<GoogleSignInResult> = Auth.GoogleSignInApi.silentSignIn(googleApiClient)
-//        if(opr.isDone){
-//            val result = opr.get()
-//            handlerSignInResult(result)
-//        }else{
-//            opr.setResultCallback {
-//                handlerSignInResult(it)
-//            }
-//        }
-//    }
-
-//    private fun handlerSignInResult(result: GoogleSignInResult?) {
-//        if(result!!.isSuccess){
-//            val account = result.signInAccount
-//            Glide.with(this).load(account!!.photoUrl).into(userImageView)
-//            userFullNameTextView.text = account.displayName
-//
-//        }else{
-//
-//            goLogInScreen()
-//        }
-//    }
-
-//    private fun goLogInScreen() {
-//        val intent = Intent(this,LoginActivity::class.java)
-//        startActivity(intent)
-//    }
 
     private fun backButtonListener() {
 //        TODO("Implement the back button to MainActivity")
@@ -116,23 +76,4 @@ class AccountActivity : AppCompatActivity(),GoogleApiClient.OnConnectionFailedLi
     }
     override fun onConnectionFailed(p0: ConnectionResult) {
     }
-
-//    private fun logOut(){
-//        Auth.GoogleSignInApi.signOut(googleApiClient).setResultCallback {
-//            if(it.isSuccess){
-//                goLogInScreen()
-//            }else{
-//                Toast.makeText(applicationContext,"Impossible to close session",Toast.LENGTH_SHORT).show()
-//            }
-//        }
-//    }
-//    private fun revoke(){
-//        Auth.GoogleSignInApi.revokeAccess(googleApiClient).setResultCallback {
-//            if(it.isSuccess){
-//                goLogInScreen()
-//            }else{
-//                Toast.makeText(applicationContext,"Impossible to close session",Toast.LENGTH_SHORT).show()
-//            }
-//        }
-//    }
 }
