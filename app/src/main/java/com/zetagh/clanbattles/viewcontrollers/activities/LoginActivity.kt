@@ -28,7 +28,26 @@ class LoginActivity : AppCompatActivity() {
 
         signInButtonListener()
         logInButtonListener()
+        signUpButtonListener()
 
+    }
+
+    private fun isUserLoggedIn():Boolean{
+        if(FirebaseAuth.getInstance().currentUser == null){
+            Log.d(TAG,"User not logged in.")
+            Toast.makeText(applicationContext,"Log in first please.",Toast.LENGTH_SHORT).show()
+            return false
+        }
+        else{
+            return true
+        }
+    }
+
+    private fun signUpButtonListener() {
+        signUpButton.setOnClickListener {
+            val context = it.context
+            context.startActivity(Intent(context,SignUpActivity::class.java))
+        }
     }
 
     private fun signInButtonListener(){
@@ -39,8 +58,13 @@ class LoginActivity : AppCompatActivity() {
 
     private fun logInButtonListener(){
         loginButton.setOnClickListener {
-            val context = it.context
-            context.startActivity(Intent(context,MainActivity::class.java))
+            if(isUserLoggedIn()){
+                val context = it.context
+                context.startActivity(Intent(context,MainActivity::class.java))
+            }
+            else{
+                isUserLoggedIn()
+            }
 
         }
     }

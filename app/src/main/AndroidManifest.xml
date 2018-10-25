@@ -36,7 +36,7 @@
         <activity
             android:name=".viewcontrollers.activities.MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".viewcontrollers.activities.AddPublicationActivity"
             android:parentActivityName=".viewcontrollers.activities.MainActivity"
@@ -69,10 +69,13 @@
         <activity
             android:name=".viewcontrollers.activities.LogOutActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-
-        <activity android:name=".viewcontrollers.activities.SettingsActivity"
-            android:parentActivityName=".viewcontrollers.activities.LogOutActivity"
-            android:label="My Settings"/>
+        <activity
+            android:name=".viewcontrollers.activities.SettingsActivity"
+            android:label="My Settings"
+            android:parentActivityName=".viewcontrollers.activities.LogOutActivity" />
+        <activity android:name=".viewcontrollers.activities.SignUpActivity"
+            android:label="Register"
+            android:parentActivityName=".viewcontrollers.activities.LoginActivity"/>
     </application>
 
 </manifest>

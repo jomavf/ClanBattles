@@ -34,86 +34,64 @@ import java.util.*
 
 class AddPublicationActivity : AppCompatActivity() {
 
-    var downloadUri :String?=null
-    private val PICK_IMAGE_REQUEST = 1234
+    private var downloadUri :String?=null
     private var filePath: Uri?=null
     private var bitmap: Bitmap?=null
-    internal var storage : FirebaseStorage?=null
-    internal var storageReference: StorageReference?=null
+    private var storage : FirebaseStorage?=null
+    private var storageReference: StorageReference?=null
     private var dataByte:ByteArray?=null
-    private var CAMERA_REQUEST_CODE = 1
-    private var GALLERY_REQUEST  = 1
     private var mCurrentPhotoPath:String?=null
     private var photoFile: File?=null
-    var id:Int?=null
+    private var id:Int?=null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_publication)
         setSupportActionBar(toolbar)
 
-        var intentExtras = intent
+        val intentExtras = intent
         id = intentExtras.getIntExtra("id",1)
 
-        //Load image
+        //Get instance of firebase
         storage = FirebaseStorage.getInstance()
         storageReference = storage!!.reference
         buttonListenerToGallery()
-        cameraButtonListener()
 
-        //Load image to Firebase
-        addPublicationBottonOnClick()
+        //Load image to firebase
+        addPublicationButtonOnClick()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-
 
         if(requestCode == PICK_IMAGE_REQUEST &&  resultCode == RESULT_OK && data!= null && data.data !=null){
             Log.d("photo","Entro a ")
             filePath = data.data
             try {
                 bitmap = MediaStore.Images.Media.getBitmap(contentResolver,filePath)
-                var stream = ByteArrayOutputStream()
+                val stream = ByteArrayOutputStream()
                 bitmap!!.compress(Bitmap.CompressFormat.JPEG,25,stream)
                 dataByte= stream.toByteArray()
                 loadFromGalleryButton.setImageBitmap(bitmap)
-//                loadFromGalleryButton.setImageURI(filePath)
                 loadFromGalleryButton.visibility = View.VISIBLE
             }catch (e: IOException){
                 e.printStackTrace()
             }
         }
-        if(requestCode == CAMERA_REQUEST_CODE && resultCode == Activity.RESULT_OK){
-
-            try {
-                bitmap = MediaStore.Images.Media.getBitmap(contentResolver, Uri.parse(mCurrentPhotoPath))
-                loadFromGalleryButton.setImageBitmap(bitmap)
-                loadFromGalleryButton.visibility = View.VISIBLE
-            }catch (e: IOException){
-                Log.d("photo",e.printStackTrace().toString())
-            }
-
-        }
-
-    }
-
-    private fun createImageFile() {
-        var timeStamp:String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
-        var imageFileName:String = "JPEG_" + timeStamp + "_"
-        var storageDir: File = Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_PICTURES)
-        photoFile = File.createTempFile(
-                imageFileName,  // prefix
-                ".jpg",         // suffix
-                storageDir      // directory
-        )
-        mCurrentPhotoPath = "file:" + photoFile!!.absolutePath
+//        if(requestCode == CAMERA_REQUEST_CODE && resultCode == Activity.RESULT_OK){
+//            try {
+//                bitmap = MediaStore.Images.Media.getBitmap(contentResolver, Uri.parse(mCurrentPhotoPath))
+//                loadFromGalleryButton.setImageBitmap(bitmap)
+//                loadFromGalleryButton.visibility = View.VISIBLE
+//            }catch (e: IOException){
+//                Log.d("photo",e.printStackTrace().toString())
+//            }
+//        }
     }
 
     private fun buttonListenerToGallery() {
         chooseImage.setOnClickListener{
-            var i = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+            val i = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
             i.type = "image/*"
             i.action = Intent.ACTION_GET_CONTENT
             startActivityForResult(Intent.createChooser(i,"SELECT PICTURE"),PICK_IMAGE_REQUEST)
@@ -122,7 +100,7 @@ class AddPublicationActivity : AppCompatActivity() {
 
     private fun initPublication(): JSONObject {
 
-        var jsonObject = JSONObject()
+        val jsonObject = JSONObject()
         jsonObject.put("title",titleEditView.text)
         jsonObject.put("description",descriptionEditText.text)
         jsonObject.put("urlToImage",downloadUri)
@@ -152,7 +130,7 @@ class AddPublicationActivity : AppCompatActivity() {
                         val progress = 100.0 * taskSnapshot.bytesTransferred/taskSnapshot.totalByteCount
                         progressDialog.setMessage("Uploaded "+ progress.toInt() +"%...")
                     }
-                    .continueWithTask(Continuation<UploadTask.TaskSnapshot, Task<Uri>> {
+                    .continueWithTask(Continuation<UploadTask.TaskSnapshot, Task<Uri>> { it ->
                         if(!it.isSuccessful){
                             it.exception?.let {
                                 throw it
@@ -170,7 +148,7 @@ class AddPublicationActivity : AppCompatActivity() {
         }
     }
 
-    private fun addPublicationBottonOnClick(){
+    private fun addPublicationButtonOnClick(){
         addPublicationButton.setOnClickListener {
             uploadImage()
         }
@@ -204,30 +182,9 @@ class AddPublicationActivity : AppCompatActivity() {
                 Intent(context,MainActivity::class.java)
         )
     }
-    private fun cameraButtonListener(){
 
-//        takePhotoImage.setOnClickListener{
-//            var intent =  Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-//
-////            createImageFile()
-//                Log.d("photo","photoFile -> $photoFile")
-//                Log.d("photo","photoFilePath -> $mCurrentPhotoPath")
-//
-//            if(intent.resolveActivity(packageManager)!=null){
-//
-//                Log.d("photo","eNTRE")
-////                try {
-////                    photoFile = createImageFile()
-////                    Log.d("photo","photoFilePath -> $mCurrentPhotoPath")
-////                    Log.d("photo","photoFile -> $photoFile")
-////                }catch (e:IOException){
-////                    Log.d("photo","Catch error -> ${e.printStackTrace()}")
-////                }
-//                if(photoFile!=null){
-//                    intent.putExtra(MediaStore.EXTRA_OUTPUT,Uri.fromFile(photoFile))
-//                    startActivityForResult(intent,CAMERA_REQUEST_CODE)
-//                }
-//            }
-//        }
+    companion object {
+        private const val PICK_IMAGE_REQUEST = 1234
+//        private const val CAMERA_REQUEST_CODE = 1
     }
 }

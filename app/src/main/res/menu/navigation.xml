@@ -20,6 +20,6 @@
     <item
         android:id="@+id/navigation_favorites"
         android:icon="@drawable/ic_outline_mail_24px"
-        android:title="@string/chat"/>
+        android:title="@string/notification"/>
     
 </menu>

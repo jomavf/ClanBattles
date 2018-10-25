@@ -5,7 +5,7 @@
     <string name="mock_text">MockText</string>
     <string name="title_activity_onboarding">OnboardingActivity</string>
     <string name="map">Map</string>
-    <string name="chat">Chat</string>
+    <string name="notification">Notification</string>
     <string name="rank">Rank</string>
     <string name="search">Search</string>
     <string name="settings">Settings</string>
@@ -25,6 +25,7 @@
     <string name="userImageView">userImageView</string>
     <string name="account">Account</string>
     <string name="username">mockUsername</string>
+    <string name="register_string">Register</string>
 
 </resources>
 

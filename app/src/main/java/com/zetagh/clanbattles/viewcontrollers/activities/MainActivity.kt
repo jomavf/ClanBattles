@@ -28,7 +28,7 @@ import com.zetagh.clanbattles.viewcontrollers.fragments.MapFragment
 import com.zetagh.clanbattles.viewcontrollers.fragments.RankFragment
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : AppCompatActivity(),GoogleApiClient.OnConnectionFailedListener  {
+class MainActivity : AppCompatActivity(){
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item -> return@OnNavigationItemSelectedListener navigateTo(item) }
     private val TAG = "mainActivity"
@@ -39,23 +39,26 @@ class MainActivity : AppCompatActivity(),GoogleApiClient.OnConnectionFailedListe
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
 
+        shouldShowOnBoardingFunc()
+        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
+        navigation.selectedItemId = R.id.navigation_home
+        setOnListenerFloatingActionButton()
+    }
+
+    private fun shouldShowOnBoardingFunc(){
         val settings = SettingsRepository(this)
         if (settings.shouldShowOnboarding) {
             startActivity(
                     Intent(this,
                             OnBoardingActivity::class.java))
         }
-
-        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
-        navigation.selectedItemId = R.id.navigation_home
-
-        setOnListenerFloatingActionButton()
     }
+
 
     override fun onStart() {
         super.onStart()
         if(FirebaseAuth.getInstance().currentUser == null){
-            Log.d(TAG,"User not registered")
+            Log.d(TAG,"User not logged in.")
             Toast.makeText(applicationContext,"Log in first please.",Toast.LENGTH_SHORT).show()
             goLogInScreen()
         }
@@ -64,10 +67,6 @@ class MainActivity : AppCompatActivity(),GoogleApiClient.OnConnectionFailedListe
     private fun goLogInScreen() {
         val intent = Intent(this,LoginActivity::class.java)
         startActivity(intent)
-    }
-
-    override fun onConnectionFailed(p0: ConnectionResult) {
-
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -111,8 +110,9 @@ class MainActivity : AppCompatActivity(),GoogleApiClient.OnConnectionFailedListe
                 return RankFragment()
             }
             R.id.navigation_favorites -> {
-                toolbar.title = "Messages"
+                toolbar.title = "Notifications"
                 mainFloatingActionButton.visibility = View.GONE
+                // TODO(Change fragment name to notification)
                 return ChatFragment()
             }
         }

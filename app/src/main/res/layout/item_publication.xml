@@ -4,13 +4,13 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="4dp"
-    android:layout_marginEnd="16dp"
-    android:layout_marginStart="16dp"
+    android:layout_marginEnd="0dp"
+    android:layout_marginStart="0dp"
     android:layout_marginTop="8dp"
-    android:elevation="16dp"
+    android:elevation="10dp"
     android:theme="@style/Widget.MaterialComponents.BottomNavigationView.Colored"
     app:cardBackgroundColor="@color/colorCards"
-    app:cardCornerRadius="8dp"
+    app:cardCornerRadius="0dp"
     app:cardElevation="16dp"
 
     >
@@ -71,7 +71,7 @@
             android:src="@drawable/ic_round_perm_identity_24px"
             app:layout_constraintBottom_toTopOf="@id/descriptionTextViewPublication"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/avatarImagePublication"
             app:layout_constraintTop_toBottomOf="@id/avatarImagePublication" />
 
         <TextView
@@ -80,14 +80,14 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:layout_marginEnd="16dp"
-            android:layout_marginStart="16dp"
+            android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:background="@color/colorCards"
             android:lineSpacingExtra="8dp"
             android:textColor="@color/colorPrimaryText"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/avatarImagePublication"
             app:layout_constraintTop_toBottomOf="@id/descriptionImageViewPublication" />
 
     </android.support.constraint.ConstraintLayout>
