@@ -18,7 +18,7 @@
             android:layout_width="0dp"
             android:layout_height="175dp"
             android:background="@drawable/circle_outline"
-            android:scaleType="fitXY"
+            android:scaleType="centerCrop"
             android:src="@mipmap/ic_launcher"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

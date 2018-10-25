@@ -67,7 +67,7 @@
             android:layout_marginTop="8dp"
             android:background="@drawable/round_outline"
             android:elevation="0dp"
-            android:scaleType="fitXY"
+            android:scaleType="centerCrop"
             android:src="@drawable/ic_round_perm_identity_24px"
             app:layout_constraintBottom_toTopOf="@id/descriptionTextViewPublication"
             app:layout_constraintEnd_toEndOf="parent"

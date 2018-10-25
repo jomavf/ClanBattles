@@ -33,13 +33,6 @@ class HomeFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        if(arguments != null){
-            bundle = this.arguments!!
-            publication = Publication.from(bundle)
-            Log.d("ClanBattles","Name of publication " + publication.id)
-        }
-        bundle = this.arguments!!
-
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -47,7 +40,7 @@ class HomeFragment : Fragment() {
 
         val view =  inflater.inflate(R.layout.fragment_home, container, false)
 
-        val getPublicationUrl = ClanBattlesApi.getPublicationByGamer(publication.id!!)
+        val getPublicationUrl = ClanBattlesApi.getPublicationByGamer(1)
         publicationAdapter = PublicationAdapter(publications,view.context)
         publicationLayoutManager = LinearLayoutManager(view.context)
         publicationRecyclerView = view.HomeRecyclerView

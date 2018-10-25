@@ -1,92 +1,97 @@
 package com.zetagh.clanbattles.viewcontrollers.activities
 
+import android.app.Activity
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
-import com.google.android.gms.auth.api.Auth
-import com.google.android.gms.auth.api.signin.*
-import com.google.android.gms.common.ConnectionResult
-import com.google.android.gms.common.SignInButton
-import com.google.android.gms.common.api.ApiException
-import com.google.android.gms.common.api.GoogleApiClient
-import com.google.android.gms.tasks.Task
+import com.firebase.ui.auth.AuthUI
+import com.firebase.ui.auth.IdpResponse
+import com.google.firebase.auth.FirebaseAuth
 import com.zetagh.clanbattles.R
 import kotlinx.android.synthetic.main.content_login.*
 
-class LoginActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedListener {
+class LoginActivity : AppCompatActivity() {
 
-    private var googleSignInClient: GoogleSignInClient? = null
-    private lateinit var gso:GoogleSignInOptions
-    private val RC_SIGN_IN = 777
+    private lateinit var auth: FirebaseAuth
+    private lateinit var sharePref: SharedPreferences
+    private val TAG = "loginModule"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail()
-                .build()
+        auth = FirebaseAuth.getInstance()
 
-        googleSignInClient = GoogleSignIn.getClient(this,gso)
+        signInButtonListener()
+        logInButtonListener()
 
-        userAlreadyLogIn()
+    }
 
+    private fun signInButtonListener(){
+        signInButton.setOnClickListener {
+            createSignInIntent()
+        }
+    }
+
+    private fun logInButtonListener(){
         loginButton.setOnClickListener {
             val context = it.context
             context.startActivity(Intent(context,MainActivity::class.java))
-        }
 
-        //Sign in button listener
-        signInButtonCustomize()
-        signInButton.setOnClickListener {
-            val signInIntent:Intent= googleSignInClient!!.signInIntent
-            startActivityForResult(signInIntent,RC_SIGN_IN)
-        }
-
-    }
-
-    private fun userAlreadyLogIn() {
-        val account : GoogleSignInAccount? = GoogleSignIn.getLastSignedInAccount(this)
-        updateUI(account)
-    }
-
-    private fun updateUI(account: GoogleSignInAccount?) {
-        if(account != null){
-            //user already signed in the app
-            goMainScreen()
-        }else{
-            //the user has not yet signed in
-            Toast.makeText(applicationContext,"Log in please",Toast.LENGTH_SHORT).show()
         }
     }
 
-    private fun signInButtonCustomize() {
-        signInButton.setSize(SignInButton.SIZE_WIDE)
-        signInButton.setColorScheme(SignInButton.COLOR_DARK )
+    private fun createSignInIntent(){
+
+        val providers = arrayListOf(
+                AuthUI.IdpConfig.GoogleBuilder().build())
+
+        startActivityForResult(
+                AuthUI.getInstance()
+                        .createSignInIntentBuilder()
+                        .setAvailableProviders(providers)
+                        .build(),
+                RC_SIGN_IN)
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if(requestCode == RC_SIGN_IN){
-            val task : Task<GoogleSignInAccount> = GoogleSignIn.getSignedInAccountFromIntent(data)
-            handleSignInResult(task)
+        if (requestCode == RC_SIGN_IN) {
+            val response = IdpResponse.fromResultIntent(data)
+
+            if (resultCode == Activity.RESULT_OK) {
+                val user = FirebaseAuth.getInstance().currentUser
+                saveUserToSharePreference(user!!.displayName,user.photoUrl.toString())
+                goMainScreen()
+            } else {
+                Toast.makeText(applicationContext,"Not possible to log in.",Toast.LENGTH_SHORT).show()
+                goLogInScreen()
+                Log.d(TAG,"Not possible to log in. -> ${response!!.error!!}")
+            }
         }
     }
 
-    private fun handleSignInResult(completeTask: Task<GoogleSignInAccount>?) {
-        try {
-            //TODO(Should I save here in the shared Preference?)
-            val account : GoogleSignInAccount = completeTask!!.getResult(ApiException::class.java)!!
-            Log.d("test","Log in act Username -> ${account.displayName}")
-            Log.d("test","Log in act PhotoUrl -> ${account.photoUrl}")
-            goMainScreen()
-        }catch (e:ApiException ){
-            Log.d("signIn","signInResult:failed code= ${e.statusCode}")
-        }
+    private fun goLogInScreen() {
+        val intent = Intent(this,LoginActivity::class.java)
+        startActivity(intent)
     }
+
+    private fun saveUserToSharePreference(username:String?,urlToUserImage:String) {
+        sharePref = getSharedPreferences("com.zetagh.clanbattles.userData", Context.MODE_PRIVATE)
+        with(sharePref.edit()){
+            putString("username",username)
+            putString("urlToUserImage",urlToUserImage)
+            apply()
+        }
+        Log.d("test",sharePref.getString("username","NF"))
+        Log.d("test",sharePref.getString("urlToUserImage","NF"))
+    }
+
 
     private fun goMainScreen() {
         val intent = Intent(this,MainActivity::class.java)
@@ -95,9 +100,8 @@ class LoginActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedLis
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         startActivity(intent)
     }
-
-    override fun onConnectionFailed(p0: ConnectionResult) {
+    companion object {
+        private const val RC_SIGN_IN = 9001
     }
-
 }
 

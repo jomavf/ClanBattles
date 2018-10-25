@@ -11,12 +11,15 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.Toast
+import com.firebase.ui.auth.AuthUI
 import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.auth.api.signin.GoogleSignInResult
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.common.api.OptionalPendingResult
+import com.google.firebase.auth.FirebaseAuth
 import com.zetagh.clanbattles.R
 import com.zetagh.clanbattles.models.SettingsRepository
 import com.zetagh.clanbattles.viewcontrollers.fragments.ChatFragment
@@ -28,27 +31,9 @@ import kotlinx.android.synthetic.main.activity_main.*
 class MainActivity : AppCompatActivity(),GoogleApiClient.OnConnectionFailedListener  {
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item -> return@OnNavigationItemSelectedListener navigateTo(item) }
-    private lateinit var bundle:Bundle
-
-    //Google SignIn
-    private lateinit var gso: GoogleSignInOptions
-    private lateinit var googleApiClient: GoogleApiClient
-
-    //Shared Preference
-    private lateinit var sharePref:SharedPreferences
-
-    //TODO(Tengo que primero hacer un login silencioso , guardar los datos necesarios en el shared preference o base de datos y luego jalar esa data a los campos correspodientes [acccount activity] , borrar login silencioso de account activity ,by Veliz)
+    private val TAG = "mainActivity"
 
     override fun onCreate(savedInstanceState: Bundle?) {
-
-        val intent = intent?:return
-        if(intent.extras != null){
-            bundle = intent.extras!!
-        }else{
-            //TODO("Improve this strategy")
-            bundle = Bundle()
-            bundle.putInt("id", 1)
-        }
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -61,45 +46,21 @@ class MainActivity : AppCompatActivity(),GoogleApiClient.OnConnectionFailedListe
                             OnBoardingActivity::class.java))
         }
 
-        //Google SignIn
-        getObjectResult()
-
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
         navigation.selectedItemId = R.id.navigation_home
 
-        //Function below
         setOnListenerFloatingActionButton()
     }
 
-    //Google SignIn
-    private fun getObjectResult() {
-        gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build()
-        googleApiClient = GoogleApiClient.Builder(this).enableAutoManage(this,this).addApi(Auth.GOOGLE_SIGN_IN_API,gso).build()
-    }
     override fun onStart() {
         super.onStart()
-        val opr : OptionalPendingResult<GoogleSignInResult> = Auth.GoogleSignInApi.silentSignIn(googleApiClient)
-        if(opr.isDone){
-            val result = opr.get()
-            handlerSignInResult(result)
-        }else{
-            opr.setResultCallback {
-                handlerSignInResult(it)
-            }
-        }
-    }
-    private fun handlerSignInResult(result: GoogleSignInResult?) {
-        if(result!!.isSuccess){
-            val account = result.signInAccount
-            //You have to save the data to the
-//            Glide.with(this).load(account!!.photoUrl).into(userImageView)
-//            userFullNameTextView.text = account.displayName
-            saveUserToSharePreference(account!!.displayName,account.photoUrl.toString())
-            Log.d("photoUrlOfUser",account.photoUrl.toString())
-        }else{
+        if(FirebaseAuth.getInstance().currentUser == null){
+            Log.d(TAG,"User not registered")
+            Toast.makeText(applicationContext,"Log in first please.",Toast.LENGTH_SHORT).show()
             goLogInScreen()
         }
     }
+
     private fun goLogInScreen() {
         val intent = Intent(this,LoginActivity::class.java)
         startActivity(intent)
@@ -108,18 +69,7 @@ class MainActivity : AppCompatActivity(),GoogleApiClient.OnConnectionFailedListe
     override fun onConnectionFailed(p0: ConnectionResult) {
 
     }
-    private fun saveUserToSharePreference(username:String?,urlToUserImage:String) {
-        sharePref = getSharedPreferences("com.zetagh.clanbattles.userData",Context.MODE_PRIVATE)
-        with(sharePref.edit()){
-            putString("username",username)
-            putString("urlToUserImage",urlToUserImage)
-            apply() // or commit()
-        }
-            Log.d("test",sharePref.getString("username","NF"))
-            Log.d("test",sharePref.getString("urlToUserImage","NF"))
-    }
 
-    //This load the Menu in the toolbar
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.navigation_toolbar,menu)
         return super.onCreateOptionsMenu(menu)
@@ -142,7 +92,6 @@ class MainActivity : AppCompatActivity(),GoogleApiClient.OnConnectionFailedListe
         val intent = Intent(this,AccountActivity::class.java)
         startActivity(intent)
     }
-
 
     private fun fragmentFor(item: MenuItem): Fragment? {
         when(item.itemId){
@@ -173,19 +122,17 @@ class MainActivity : AppCompatActivity(),GoogleApiClient.OnConnectionFailedListe
     private fun navigateTo(item: MenuItem):Boolean {
         item.isChecked = true
         val fragment: Fragment = fragmentFor(item)!!
-        fragment.arguments = bundle
         return supportFragmentManager
                 .beginTransaction()
                 .replace(R.id.content,fragment)
                 .commit()>0
     }
 
-    //SetonClickListener del mainFloatingActionButton
     private fun setOnListenerFloatingActionButton() {
         mainFloatingActionButton.setOnClickListener {
             val context = it.context
             context.startActivity(
-                    Intent(context,AddPublicationActivity::class.java).putExtras(bundle)
+                    Intent(context,AddPublicationActivity::class.java)
             )
         }
     }
