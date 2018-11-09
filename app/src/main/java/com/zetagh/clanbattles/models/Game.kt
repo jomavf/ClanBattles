@@ -3,12 +3,12 @@ package com.zetagh.clanbattles.models
 import android.os.Bundle
 
 data class Game( val id:Int,
-                 val name:String,
+                 val name:String?,
                  val rating:Int,
-                 val description:String,
-                 val urlWebPage:String,
-                 val urlToImage:String,
-                 val status:String) {
+                 val description:String?,
+                 val urlWebPage:String?,
+                 val urlToImage:String?,
+                 val status:String?) {
     companion object {
         fun from(bundle: Bundle) : Game {
             return Game(

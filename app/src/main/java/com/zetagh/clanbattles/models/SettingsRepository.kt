@@ -5,7 +5,7 @@ import android.preference.PreferenceManager
 
 class SettingsRepository(val context: Context) {
     companion object {
-        val didShowOnboarding = "didShowOnboarding"
+        var didShowOnboarding = "didShowOnboarding"
     }
 
     val preferences = PreferenceManager

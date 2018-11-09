@@ -49,7 +49,7 @@ class HomeFragment : Fragment() {
 
         AndroidNetworking.get(getPublicationUrl)
                 .setPriority(Priority.LOW)
-                .setTag(ClanBattlesApi.tag)
+                .setTag("homeFragment")
                 .build()
                 .getAsObject(PublicationResponse::class.java,object : ParsedRequestListener<PublicationResponse> {
                     override fun onResponse(response: PublicationResponse) {
@@ -60,7 +60,7 @@ class HomeFragment : Fragment() {
                     }
 
                     override fun onError(anError: ANError?) {
-                        Log.d(ClanBattlesApi.tag, anError!!.message)
+                        Log.d("homeFragment", anError!!.message)
                     }
 
                 })

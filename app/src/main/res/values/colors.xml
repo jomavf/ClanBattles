@@ -13,6 +13,8 @@
     <color name="colorDivider">#38444D</color>
     <color name="colorBackground">#15202B</color>
     <color name="colorCards">#2e4359</color>
+    <color name="colorCards2">#2E3859</color>
+    <color name="colorCards3">#213040</color>
 
 
 </resources>

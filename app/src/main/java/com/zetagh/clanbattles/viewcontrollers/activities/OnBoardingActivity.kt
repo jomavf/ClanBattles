@@ -49,18 +49,18 @@ class OnBoardingActivity : AppCompatActivity() {
 
         AndroidNetworking.get(ClanBattlesApi.getGameUrl)
                 .setPriority(Priority.MEDIUM)
-                .setTag(ClanBattlesApi.tag)
+                .setTag("onBoardingActivity")
                 .build()
                 .getAsObject(GameResponse::class.java, object : ParsedRequestListener<GameResponse> {
                     override fun onResponse(response: GameResponse) {
                         games = response.games!!
-                        Log.d(ClanBattlesApi.tag, "Parsed: Found ${games.size} games")
+                        Log.d("onBoardingActivity", "Parsed: Found ${games.size} games")
                         gamesAdapter.games = games
                         gamesAdapter.notifyDataSetChanged()
                     }
 
                     override fun onError(anError: ANError?) {
-                        Log.d(ClanBattlesApi.tag, anError!!.message)
+                        Log.d("onBoardingActivity", anError!!.message)
                     }
 
                 })

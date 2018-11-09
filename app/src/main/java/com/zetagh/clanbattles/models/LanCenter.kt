@@ -4,14 +4,14 @@ import android.os.Bundle
 
 data class LanCenter(
         val id:Int,
-        val name:String,
-        val ruc: String,
-        val email:String,
-        val address:String,
-        val latitud:Double,
-        val longitud:Double,
-        val status:String,
-        val urlToImage:String
+        val name:String?,
+        val ruc: String?,
+        val email:String?,
+        val address:String?,
+        val latitude:Double?,
+        val longitude:Double?,
+        val status:String?,
+        val urlToImage:String?
 ){
     companion object {
         fun from(bundle: Bundle):LanCenter{
@@ -21,7 +21,7 @@ data class LanCenter(
                     bundle.getString("ruc"),
                     bundle.getString("email"),
                     bundle.getString("address"),
-                    bundle.getDouble("latitud"),
+                    bundle.getDouble("latitude"),
                     bundle.getDouble("longitude"),
                     bundle.getString("status"),
                     bundle.getString("urlToImage")
@@ -37,8 +37,8 @@ data class LanCenter(
             putString("ruc",ruc)
             putString("email",email)
             putString("address",address)
-            putDouble("latitud", latitud)
-            putDouble("longitud",longitud)
+            putDouble("latitude", latitude!!)
+            putDouble("longitude",longitude!!)
             putString("status",status)
             putString("urlToImage",urlToImage)
         }
